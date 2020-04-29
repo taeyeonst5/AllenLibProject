@@ -40,20 +40,4 @@ object DialogUtil {
             )
             .create()
     }
-
-    fun getSingleChoiceDialog2(
-        context: Context,
-        title: String,
-        items: Array<CharSequence>,
-        checked: Int,
-        itemListener: DialogInterface.OnClickListener
-    ): AlertDialog {
-        return AlertDialog.Builder(context)
-            .setTitle(title)
-            .setSingleChoiceItems(
-                items, checked
-                , itemListener
-            )
-            .create()
-    }
 }
