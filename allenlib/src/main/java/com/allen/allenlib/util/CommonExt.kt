@@ -12,23 +12,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.allen.allenlib.BuildConfig
 import com.allen.allenlib.R
 
+const val ALLEN_LOG_TAG = "allenlib"
+
 fun logd(message: String) {
     if (BuildConfig.DEBUG) {
-        val stackTrace = Thread.currentThread().stackTrace
-        Log.d(
-            "[allenlib method:${stackTrace[0].methodName} line:${stackTrace[0].lineNumber}",
-            message
-        )
+        Log.d(ALLEN_LOG_TAG, message)
     }
 }
 
 fun loge(message: String) {
     if (BuildConfig.DEBUG) {
-        val stackTrace = Thread.currentThread().stackTrace
-        Log.e(
-            "[allenlib method:${stackTrace[0].methodName} line:${stackTrace[0].lineNumber}",
-            message
-        )
+        Log.e(ALLEN_LOG_TAG, message)
     }
 }
 
