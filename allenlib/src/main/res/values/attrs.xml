@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CircleView">
+        <attr name="circleRadius" format="dimension" />
+        <attr name="circleColor" format="color" />
+        <attr name="circleDrawOnlystroke" format="boolean" />
+        <attr name="circleStrokeWidth" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="TashieLoader">
+        <attr name="tashieloader_dotsRadius" format="dimension" />
+        <attr name="tashieloader_dotsDist" format="dimension" />
+        <attr name="tashieloader_dotsColor" format="color" />
+        <attr name="tashieloader_animDur" format="integer" />
+        <attr name="tashieloader_interpolator" format="reference" />
+        <attr name="tashieloader_noOfDots" format="integer" />
+        <attr name="tashieloader_animDelay" format="integer" />
+    </declare-styleable>
+</resources>

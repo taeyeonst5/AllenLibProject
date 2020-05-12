@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--  progressbar  -->
+    <color name="allen_lib_progress_default">#D3D4D5</color>
+    <color name="allen_lib_loader_selected">#ffffff</color>
+</resources>

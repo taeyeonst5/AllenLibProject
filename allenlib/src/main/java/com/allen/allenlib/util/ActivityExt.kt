@@ -4,9 +4,14 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
+import android.view.ViewGroup
+import android.view.animation.LinearInterpolator
+import androidx.annotation.ColorRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.content.ContextCompat
+import com.allen.allenlib.R
+import com.allen.allenlib.view.progressbar.TashieLoader
 
 
 fun checkGetWriteStoragePermission(context: Context): Boolean {
@@ -48,12 +53,45 @@ fun Activity.checkSpecificPermission(context: Context, permission: String): Bool
     }
 }
 
-fun Activity.requestSpecificPermission(activity: AppCompatActivity, permission: String, requestCode: Int) {
+fun Activity.requestSpecificPermission(
+    activity: AppCompatActivity,
+    permission: String,
+    requestCode: Int
+) {
     logd("requestPermission")
     requestPermissions(
         activity,
         arrayOf(permission),
         requestCode
     )
+}
+
+/**
+ * showDotProgress (hint: don't forget to call removeDotProgress to dismiss progress)
+ * @param container FrameLayout container for add dotView
+ * @param resId default null - grey dot ,or wanna colorRes
+ */
+fun Activity.showDotProgress(container: ViewGroup, @ColorRes resId: Int? = null) {
+    val dotView = TashieLoader(
+        this, 4,
+        30, 10,
+        resId?.let {
+            ContextCompat.getColor(this, it)
+        } ?: ContextCompat.getColor(this, R.color.allen_lib_progress_default)
+
+    )
+        .apply {
+            animDuration = 500
+            animDelay = 100
+            interpolator = LinearInterpolator()
+        }
+    container.addView(dotView)
+}
+
+/**
+ * removeDotProgress
+ */
+fun Activity.removeDotProgress(container: ViewGroup) {
+    container.removeAllViews()
 }
 
