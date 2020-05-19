@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.animation.LinearInterpolator
 import androidx.annotation.ColorRes
 import androidx.appcompat.app.AppCompatActivity
@@ -95,3 +96,10 @@ fun Activity.removeDotProgress(container: ViewGroup) {
     container.removeAllViews()
 }
 
+fun Activity.setWindowNoLimits() {
+    //background can overlay transparent statusbar
+    window.setFlags(
+        WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+        WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+    )
+}
