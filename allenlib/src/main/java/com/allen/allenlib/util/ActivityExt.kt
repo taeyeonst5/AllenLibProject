@@ -4,8 +4,8 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
+import android.util.TypedValue
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.animation.LinearInterpolator
 import androidx.annotation.ColorRes
 import androidx.appcompat.app.AppCompatActivity
@@ -96,10 +96,23 @@ fun Activity.removeDotProgress(container: ViewGroup) {
     container.removeAllViews()
 }
 
-fun Activity.setWindowNoLimits() {
-    //background can overlay transparent statusbar
-    window.setFlags(
-        WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-        WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-    )
+fun Activity.getStatusBarHeight(): Int {
+    var result = 0
+    val resId = resources.getIdentifier("status_bar_height", "dimen", "android")
+    if (resId > 0) {
+        result = resources.getDimensionPixelSize(resId)
+    }
+    return result
+}
+
+fun Activity.getActionBarHeight(): Int {
+    var appbarHeight = 0
+    val tv = TypedValue()
+    if (theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+        appbarHeight = TypedValue.complexToDimensionPixelSize(
+            tv.data,
+            resources.displayMetrics
+        )
+    }
+    return appbarHeight
 }

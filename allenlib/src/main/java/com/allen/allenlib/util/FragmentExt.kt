@@ -183,3 +183,12 @@ fun Fragment.setupBottomNavItemBackPress() {
             }
         })
 }
+
+fun Fragment.getStatusBarHeight(): Int {
+    var result = 0
+    val resId = resources.getIdentifier("status_bar_height", "dimen", "android")
+    if (resId > 0) {
+        result = resources.getDimensionPixelSize(resId)
+    }
+    return result
+}
