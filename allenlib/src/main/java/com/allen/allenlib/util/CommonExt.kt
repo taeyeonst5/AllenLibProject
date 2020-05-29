@@ -9,6 +9,8 @@ import androidx.core.os.bundleOf
 import androidx.core.widget.NestedScrollView
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SnapHelper
 import com.allen.allenlib.BuildConfig
 import com.allen.allenlib.R
 
@@ -116,4 +118,32 @@ private fun needFetchMoreList(
 
 interface LoadMoreListener {
     fun onLoadMore(currentItemPosition: Int, nowPage: Int)
+}
+
+fun SnapHelper.getSnapPosition(recyclerView: RecyclerView): Int {
+    val layoutManager = recyclerView.layoutManager ?: return RecyclerView.NO_POSITION
+    val snapView = findSnapView(layoutManager) ?: return RecyclerView.NO_POSITION
+    return layoutManager.getPosition(snapView)
+}
+
+fun setupAnimation(position: Int, totalItem: Int, recyclerView: RecyclerView) {
+    //animate last item
+    if (position - 1 >= 0) {
+        recyclerView.setViewHolderScale(position - 1, 1.0f, 1.0f)
+    }
+    //animate next item
+    if (position + 1 <= totalItem) {
+        recyclerView.setViewHolderScale(position + 1, 1.0f, 1.0f)
+    }
+    //animate SnapPosition item
+    recyclerView.setViewHolderScale(position, 1.2f, 1.2f)
+}
+
+private fun RecyclerView.setViewHolderScale(position: Int, scaleX: Float, scaleY: Float) {
+    val findViewHolderForLayoutPosition =
+        findViewHolderForLayoutPosition(position)
+    findViewHolderForLayoutPosition?.let {
+        it.itemView.animate().scaleX(scaleX)
+        it.itemView.animate().scaleY(scaleY)
+    }
 }
