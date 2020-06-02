@@ -3,4 +3,7 @@
     <!--  progressbar  -->
     <color name="allen_lib_progress_default">#D3D4D5</color>
     <color name="allen_lib_loader_selected">#ffffff</color>
+
+    <!--  textView  -->
+    <color name="allen_lib_text_black">#000000</color>
 </resources>

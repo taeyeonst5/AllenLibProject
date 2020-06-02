@@ -9,4 +9,15 @@
     <string name="args_alert_dialog_btn_positive_text">btnPositive</string>
     <string name="args_alert_dialog_btn_negative_text">btnNegative</string>
     <string name="args_alert_dialog_back_destinationId">backDestinationId</string>
+
+    <!--  Toast  -->
+    <string name="toast_failure_takePhoto">拍照取消</string>
+    <string name="toast_failure_choosePhoto">未選擇圖片</string>
+    <string name="toast_failure_needPermission">需要權限才可繼續</string>
+
+    <!-- AddPhotoBottomDialogFragment -->
+    <string name="dialog_add_photo">新增圖片</string>
+    <string name="dialog_camera">相機</string>
+    <string name="dialog_gallery">相簿</string>
+    <string name="dialog_delete">刪除</string>
 </resources>

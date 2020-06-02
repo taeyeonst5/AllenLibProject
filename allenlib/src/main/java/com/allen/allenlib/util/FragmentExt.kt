@@ -21,13 +21,18 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.allen.allenlib.R
 import com.allen.allenlib.view.CustomAutoCompleteTextView
+import com.theartofdev.edmodo.cropper.CropImage
 import java.io.File
 import java.io.IOException
 
-fun Fragment.saveUrltoGallery(context: Application, url: String) {
-    val photoFilePath: File = FileUtils.createImageFile(context)
+fun Fragment.saveUrltoGallery(
+    context: Application,
+    url: String,
+    baseImageFileUtils: BaseImageFileUtils
+) {
+    val photoFilePath: File = baseImageFileUtils.createImageFile(context)
     try {
-        FileUtils.saveBitmaptoGallery(context, url, photoFilePath)
+        baseImageFileUtils.saveBitmaptoGallery(context, url, photoFilePath)
     } catch (e: IOException) {
         //error
         loge("e=${e.printStackTrace()}")
@@ -35,13 +40,15 @@ fun Fragment.saveUrltoGallery(context: Application, url: String) {
     }
 }
 
-
-fun Fragment.takePictureIntent(): String {
+/**
+ * Note: need change getFileProviderFileUri's  authority for each app ,also need change manifests
+ */
+fun Fragment.takePictureIntent(baseImageFileUtils: BaseImageFileUtils): String {
     var filePath = String()
     Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
         takePictureIntent.resolveActivity(requireActivity().packageManager)?.also {
             val photoFile: File? = try {
-                FileUtils.createImageFile(requireContext()).also {
+                baseImageFileUtils.createImageFile(requireContext()).also {
                     filePath = it.absolutePath
                 }
             } catch (e: IOException) {
@@ -52,14 +59,14 @@ fun Fragment.takePictureIntent(): String {
 
             photoFile?.also {
                 val photoURI: Uri =
-                    FileUtils.getFileProviderFileUri(it, requireContext())
+                    baseImageFileUtils.getFileProviderFileUri(it, requireContext())
 
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                 startActivityForResult(
                     takePictureIntent,
                     REQUEST_IMAGE_CAPTURE
                 )
-                logd("startActivityForResult")
+                logd("takePictureIntent startActivityForResult")
             }
         }
     }
@@ -115,18 +122,35 @@ fun Fragment.setCheckBoxButtonTint(vararg checkBoxs: CheckBox, @ColorRes colorRe
     }
 }
 
-///**
-// * for library cropImage: com.theartofdev.edmodo:android-image-cropper:2.8.0
-// * */
-//fun Fragment.cropImage(uri: Uri?) {
-//    if (uri == null) {
-//        loge("裁切圖片失敗: tmp file uri is null")
-//        return
-//    }
-//
-//    logd("uri=$uri")
-//    CropImage.activity(uri).start(requireContext(), this)
-//}
+/**
+ * for library cropImage: com.theartofdev.edmodo:android-image-cropper:2.8.0
+ * */
+fun Fragment.cropImage(
+    uri: Uri?,
+    setRatio: Boolean = false,
+    ratioX: Int? = null,
+    ratioY: Int? = null
+) {
+    if (uri == null) {
+        loge("裁切圖片失敗: tmp file uri is null")
+        return
+    }
+
+    logd("uri=$uri")
+    val activity = CropImage.activity(uri)
+    if (setRatio) {
+        ratioX?.let { x ->
+            ratioY?.let { y ->
+                activity.setAspectRatio(x, y)
+            }
+        }
+    }
+    activity.start(requireContext(), this)
+}
+
+fun Fragment.cropImageSquareRatio(uri: Uri?) {
+    cropImage(uri, true, 1, 1)
+}
 
 fun Fragment.createAutoTextViewSpinner(
     menuItem: List<String>,
@@ -148,10 +172,14 @@ fun Fragment.createAutoTextViewSpinner(
     autoTextView.onItemClickListener = listener
 }
 
-fun Fragment.updateImageToGallery(uri: Uri, filePath: String) {
+fun Fragment.updateImageToGallery(
+    baseImageFileUtils: BaseImageFileUtils,
+    uri: Uri,
+    filePath: String
+) {
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-        FileUtils.AddPicToGallery(
+        baseImageFileUtils.AddPicToGallery(
             requireContext(),
             filePath,
             BitmapFactory.decodeFile(uri.path)
