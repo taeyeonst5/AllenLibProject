@@ -14,6 +14,7 @@
     <string name="toast_failure_takePhoto">拍照取消</string>
     <string name="toast_failure_choosePhoto">未選擇圖片</string>
     <string name="toast_failure_needPermission">需要權限才可繼續</string>
+    <string name="toast_choose_below_10mb_image">請選擇10MB以下的圖片</string>
 
     <!-- AddPhotoBottomDialogFragment -->
     <string name="dialog_add_photo">新增圖片</string>

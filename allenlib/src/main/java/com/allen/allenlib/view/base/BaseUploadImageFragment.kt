@@ -49,6 +49,8 @@ abstract class BaseUploadImageFragment : Fragment() {
             }
             REQUEST_IMAGE_PICK -> {
                 if (resultCode == Activity.RESULT_OK) {
+                    if (checkIsLargeFileSize(data)) return
+
                     logd("PICK,RESULT_OK")
                     cropImageSquareRatio(data?.data)
                 } else if (resultCode == Activity.RESULT_CANCELED) {
@@ -63,6 +65,31 @@ abstract class BaseUploadImageFragment : Fragment() {
                 }
             }
         }
+    }
+
+    /**
+     * @return 讀取 利用Uri取得Image檔案大小()  >= 10MB is true ,others false
+     * note: 存取共享media檔案需用contentResolver  see https://developer.android.com/training/data-storage/shared/media
+     */
+    private fun checkIsLargeFileSize(data: Intent?): Boolean {
+        var imageSize = 0L
+        data?.data?.let {
+            it.path?.let { path ->
+                val resolver = requireContext().applicationContext.contentResolver
+                resolver.openFileDescriptor(it, "r").use { pfd ->
+                    pfd?.let {
+                        imageSize = (it.statSize / 1000)
+                        logd("pick file size: $imageSize ")
+                    } ?: loge("openFileDescriptor return null")
+                }
+            }
+        }
+
+        if (imageSize >= 10000) { //檔案大於10MB就return
+            toast(requireContext(), getString(R.string.toast_choose_below_10mb_image))
+            return true
+        }
+        return false
     }
 
     override fun onRequestPermissionsResult(
