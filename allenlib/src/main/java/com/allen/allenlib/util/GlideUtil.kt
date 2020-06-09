@@ -1,6 +1,7 @@
 package com.allen.allenlib.util
 
 import android.content.Context
+import android.net.Uri
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import com.bumptech.glide.Glide
@@ -21,5 +22,9 @@ object GlideUtil {
         imageVIew: ImageView
     ) {
         Glide.with(context).load(resId).into(imageVIew)
+    }
+
+    fun setLocalImageUri(context: Context, uri: Uri, view: ImageView) {
+        Glide.with(context).load(uri).into(view)
     }
 }

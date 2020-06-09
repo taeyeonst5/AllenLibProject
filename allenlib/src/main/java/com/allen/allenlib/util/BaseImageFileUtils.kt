@@ -13,15 +13,29 @@ import android.provider.MediaStore
 import androidx.core.content.FileProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy
 import com.bumptech.glide.request.RequestOptions
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-object FileUtils {
+abstract class BaseImageFileUtils {
 
-    private const val IMAGE_CHILD_PATH = "jpw"
+    /**
+     * file child path for create file
+     */
+    protected abstract var imageChildPath: String
+
+    /**
+     * example: "JPEG_${timeStamp}_"
+     */
+    protected abstract var tempFilePrefix: String
+
+    /**
+     * file provider authority  example: com.wakanda.divinationapp.fileprovider
+     */
+    protected abstract var authority: String
+
+//    private const val IMAGE_CHILD_PATH = "divination"
 
     //尚未使用
     fun convertBitmaptoFile(destinationFile: File, bitmap: Bitmap) {
@@ -29,7 +43,7 @@ object FileUtils {
         destinationFile.createNewFile()
         //Convert bitmap to byte array
         val bos = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, bos)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 95, bos)
         val bitmapData = bos.toByteArray()
         //write the bytes in file
         val fos = FileOutputStream(destinationFile)
@@ -71,24 +85,27 @@ object FileUtils {
     @Throws(IOException::class)
     fun createImageFile(context: Context): File {
         // Create an image file name
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val storageDir: File =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 createFile(
                     context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!,
-                    IMAGE_CHILD_PATH
+                    imageChildPath
                 )
             } else {
                 createFile(
                     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                    IMAGE_CHILD_PATH
+                    imageChildPath
                 )
             }
         return File.createTempFile(
-            "JPEG_${timeStamp}_", /* prefix */
+            tempFilePrefix, /* prefix */
             ".jpg", /* suffix */
             storageDir /* directory */
         )
+    }
+
+    protected fun getTimeStamp(): String {
+        return SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
     }
 
     fun saveBitmaptoGallery(context: Context, url: String, file: File) {
@@ -134,7 +151,7 @@ object FileUtils {
             contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
             contentValues.put(
                 MediaStore.MediaColumns.RELATIVE_PATH,
-                Environment.DIRECTORY_PICTURES + "/$IMAGE_CHILD_PATH"
+                Environment.DIRECTORY_PICTURES + "/$imageChildPath"
             )
         }
     }
@@ -143,11 +160,7 @@ object FileUtils {
      * 傳入File,Context 回傳FileProvider Uri
      * */
     fun getFileProviderFileUri(file: File, context: Context): Uri {
-        return FileProvider.getUriForFile(
-            context,
-            "com.example.jpw.fileprovider",
-            file
-        )
+        return FileProvider.getUriForFile(context, authority, file)
     }
 
     /**
@@ -160,7 +173,7 @@ object FileUtils {
             arrayOf("image/jpeg"),
             object : MediaScannerConnection.OnScanCompletedListener {
                 override fun onScanCompleted(path: String?, uri: Uri?) {
-                    logd("which path: $path,uri: $uri")
+                    logd("onScanCompleted path: $path,uri: $uri")
 
                     val contentResolver = context.contentResolver
 
@@ -177,7 +190,7 @@ object FileUtils {
                         } ?: throw IOException("Failed media insert")
 
                         stream?.let {
-                            if (bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream)) {
+                            if (bitmap.compress(Bitmap.CompressFormat.JPEG, 95, stream)) {
 
                             } else {
                                 throw IOException("Failed to save bitmap")
