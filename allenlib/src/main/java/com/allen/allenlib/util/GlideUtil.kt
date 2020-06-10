@@ -5,6 +5,8 @@ import android.net.Uri
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import jp.wasabeef.glide.transformations.BlurTransformation
 import org.jetbrains.annotations.NotNull
 
 object GlideUtil {
@@ -26,5 +28,10 @@ object GlideUtil {
 
     fun setLocalImageUri(context: Context, uri: Uri, view: ImageView) {
         Glide.with(context).load(uri).into(view)
+    }
+
+    fun setBlur(context: Context, @DrawableRes resId: Int, view: ImageView) {
+        Glide.with(context).load(resId)
+            .apply(RequestOptions.bitmapTransform(BlurTransformation(25, 3))).into(view)
     }
 }
