@@ -15,10 +15,13 @@ import android.widget.RadioButton
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.ColorRes
 import androidx.annotation.IdRes
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.allen.allenlib.R
 import com.allen.allenlib.view.CustomAutoCompleteTextView
 import com.theartofdev.edmodo.cropper.CropImage
@@ -201,6 +204,11 @@ fun Fragment.showErrorDialog(errorMsg: String, @IdRes actionToAlertDialogFragmen
 
 fun Fragment.popbackToDestination(navController: NavController, destinationId: Int) {
     navController.popBackStack(destinationId, false)
+}
+
+fun Fragment.initToolbar(toolbar: Toolbar) {
+    val appBarConfiguration = AppBarConfiguration(findNavController().graph)
+    toolbar.setupWithNavController(findNavController(), appBarConfiguration)
 }
 
 fun Fragment.setupBottomNavItemBackPress() {
