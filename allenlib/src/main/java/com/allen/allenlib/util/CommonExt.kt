@@ -46,13 +46,15 @@ fun getAlertDialogArgsBundle(
     message: String,
     positiveText: String,
     negativeText: String? = null,
-    destinationId: Int = 0
+    destinationId: Int = 0,
+    cancelable: Boolean = true
 ): Bundle {
     val appContext = context.applicationContext
     val bundle = bundleOf(
         appContext.getString(R.string.args_alert_dialog_type) to type,
         appContext.getString(R.string.args_alert_dialog_title) to title,
         appContext.getString(R.string.args_alert_dialog_message) to message,
+        appContext.getString(R.string.args_alert_dialog_cancelable) to cancelable,
         appContext.getString(R.string.args_alert_dialog_btn_positive_text) to positiveText,
         appContext.getString(R.string.args_alert_dialog_btn_negative_text) to negativeText,
         appContext.getString(R.string.args_alert_dialog_back_destinationId) to destinationId
