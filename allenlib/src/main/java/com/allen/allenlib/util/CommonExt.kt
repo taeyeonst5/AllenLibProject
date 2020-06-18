@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.core.os.bundleOf
@@ -37,6 +38,13 @@ val Float.dp: Int
 
 fun toast(context: Context, msg: String) {
     Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+}
+
+fun View.setSafeClickListener(onSafeClick: (View) -> Unit) {
+    val safeClickListener = SafeClickListener {
+        onSafeClick(it)
+    }
+    setOnClickListener(safeClickListener)
 }
 
 fun getAlertDialogArgsBundle(
