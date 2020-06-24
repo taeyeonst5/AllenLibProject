@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.core.os.bundleOf
 import androidx.core.widget.NestedScrollView
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -163,4 +165,21 @@ private fun RecyclerView.setViewHolderScale(position: Int, scaleX: Float, scaleY
         it.itemView.animate().scaleX(scaleX)
         it.itemView.animate().scaleY(scaleY)
     }
+}
+
+/**
+ * for observer two liveData combine to One LiveData
+ */
+fun <T, K, R> LiveData<T>.combineWith(
+    liveData: LiveData<K>,
+    block: (T?, K?) -> R
+): LiveData<R> {
+    val result = MediatorLiveData<R>()
+    result.addSource(this) {
+        result.value = block.invoke(this.value, liveData.value)
+    }
+    result.addSource(liveData) {
+        result.value = block.invoke(this.value, liveData.value)
+    }
+    return result
 }
