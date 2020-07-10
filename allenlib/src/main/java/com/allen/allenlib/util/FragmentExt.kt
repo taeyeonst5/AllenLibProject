@@ -38,7 +38,7 @@ fun Fragment.saveUrltoGallery(
         baseImageFileUtils.saveBitmaptoGallery(context, url, photoFilePath)
     } catch (e: IOException) {
         //error
-        loge("e=${e.printStackTrace()}")
+        loge("e=${e.message}")
         null
     }
 }
@@ -56,7 +56,7 @@ fun Fragment.takePictureIntent(baseImageFileUtils: BaseImageFileUtils): String {
                 }
             } catch (e: IOException) {
                 //error
-                loge("e=${e.printStackTrace()}")
+                loge("e=${e.message}")
                 null
             }
 

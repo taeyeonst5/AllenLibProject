@@ -30,7 +30,6 @@ object CommonUtils {
         try {
             result = decimalFormat.format(amount)
         } catch (e: IllegalArgumentException) {
-            e.printStackTrace()
             loge("decimalFormat Error: ${e.message}")
         }
         return result

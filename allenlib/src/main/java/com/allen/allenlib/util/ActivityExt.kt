@@ -72,7 +72,7 @@ fun Activity.requestSpecificPermission(
  * @param container FrameLayout container for add dotView
  * @param resId default null - grey dot ,or wanna colorRes
  */
-fun Activity.showDotProgress(container: ViewGroup, @ColorRes resId: Int? = null) {
+fun Context.showDotProgress(container: ViewGroup, @ColorRes resId: Int? = null) {
     val dotView = TashieLoader(
         this, 4,
         30, 10,
@@ -92,7 +92,7 @@ fun Activity.showDotProgress(container: ViewGroup, @ColorRes resId: Int? = null)
 /**
  * removeDotProgress
  */
-fun Activity.removeDotProgress(container: ViewGroup) {
+fun Context.removeDotProgress(container: ViewGroup) {
     container.removeAllViews()
 }
 
