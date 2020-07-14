@@ -7,12 +7,14 @@ import android.content.pm.PackageManager
 import android.util.TypedValue
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
+import android.view.inputmethod.InputMethodManager
 import androidx.annotation.ColorRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.content.ContextCompat
 import com.allen.allenlib.R
 import com.allen.allenlib.view.progressbar.TashieLoader
+import java.lang.Exception
 
 
 fun checkGetWriteStoragePermission(context: Context): Boolean {
@@ -115,4 +117,19 @@ fun Activity.getActionBarHeight(): Int {
         )
     }
     return appbarHeight
+}
+
+/**
+ * call this after onCreate
+ */
+fun AppCompatActivity.hideSoftKeyboard() {
+    try {
+        val im = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        currentFocus?.let {
+            im.hideSoftInputFromWindow(it.windowToken, 0)
+        }
+    } catch (e: Exception) {
+        loge("hideSoftKeyboard fail ${e.message}")
+    }
+
 }
