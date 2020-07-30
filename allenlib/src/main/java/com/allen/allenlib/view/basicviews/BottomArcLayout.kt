@@ -9,6 +9,7 @@ import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.allen.allenlib.R
+import com.allen.allenlib.util.logd
 
 class BottomArcLayout : ConstraintLayout {
     private var path: Path? = null
@@ -30,13 +31,14 @@ class BottomArcLayout : ConstraintLayout {
         paint?.style = Paint.Style.FILL
         paint?.color = ContextCompat.getColor(context, R.color.allen_lib_loader_selected)
 
-        val horizontalOffset = w * 0.5f
+        val horizontalOffset = w * 0.5f //中心點
         val top = -h * 0.8f
         val bottom = h.toFloat()
+        logd("寬:$w,高:$h,horizontalOffset:$horizontalOffset,top:$top,bottom:$bottom")
 
         val ovalRect = RectF(-horizontalOffset, top, w + horizontalOffset, bottom)
         path?.lineTo(ovalRect.left, top)
-        path?.arcTo(ovalRect, 0f, 180f, false)
+        path?.arcTo(ovalRect, 0f, 180f, false) //由右至左 正值 順時針弧線
         path?.fillType = Path.FillType.INVERSE_EVEN_ODD
     }
 
